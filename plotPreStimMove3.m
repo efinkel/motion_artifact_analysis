@@ -1,7 +1,7 @@
 function fig = plotPreStimMove3(sorted_signal, range, sampleRate)
 
 fig = figure; hold on
-set(fig, 'Visible', 'off');
+% set(fig, 'Visible', 'off');
 
 numTT = numel(sorted_signal);
 touch_trials = sorted_signal(1:(numTT/2));
@@ -39,6 +39,7 @@ line_heights_mod = [];
             patch([0,stim_len,stim_len,0], [offset*count - offset/2, offset*count - offset/2,...
                 offset*count + offset/2, offset*count + offset/2],...
                 stim_col,'edgecolor', stim_col);
+
             line_y = offset*count;
             line_heights_mod = [line_heights_mod, line_y];
             xvals = range(1):1/sampleRate:range(2);
@@ -47,10 +48,14 @@ line_heights_mod = [];
             postStim_xvals = stim_len- 1/sampleRate:1/sampleRate:range(2);
             postStim = trial_type_signal{j}((abs(range(1)) + stim_len)*30000:end);
             plot(postStim_xvals, postStim*20 + line_y, 'color', line_colors{i})
+%             plot([0,0], [offset*count - offset/2, offset*count + offset/2], 'r', 'linewidth', 3)
+%             plot([stim_len,stim_len], [offset*count - offset/2, offset*count + offset/2], 'r', 'linewidth', 3)
             count = count + 1;
         end
         count = count + 2;
     end
+    
+
     line_heights = [line_heights, {line_heights_mod}];
     ylim([-offset*2, offset*(count+3)])
     xlim(range)
@@ -63,14 +68,6 @@ line_heights_mod = [];
     box off
 end
 
-% 
-% trial_labels = cell([1, numel(rms_labels_all)]);
-% trial_labels(ismember(rms_labels_all, [1,2])) = {'hit'};
-% trial_labels(ismember(rms_labels_all, [3,4])) = {'CR'};
-% trial_labels(ismember(rms_labels_all, [5,6])) = {'miss'};
-% 
-% trial_labels(mod_label==1) = cellfun(@(x) ['touch_',x], trial_labels(mod_label==1),'uni', 0);
-% trial_labels(mod_label==2) = cellfun(@(x) ['visual_',x], trial_labels(mod_label==2),'uni', 0);
 
 touch_rms = cellfun(@(x) sort(cell2mat(x(:,3))), touch_trials, 'uni',0);
 touch_rms = vertcat(touch_rms{:});
@@ -82,7 +79,6 @@ touch_90p = prctile(touch_rms,90);
 visual_90p = prctile(vis_rms,90);
 overall_90p = prctile([touch_rms; vis_rms],90);
 
-% rms_summary = {mouse_name, a.session_name, pre_stim_rms_all, trial_labels, overall_90p};
 
 over_90_touch = line_heights{1}(touch_rms > overall_90p);
 over_90_visual = line_heights{2}(vis_rms > overall_90p);

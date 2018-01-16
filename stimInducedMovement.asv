@@ -19,12 +19,12 @@ cd ../
 cd(example_dir)
 
 % get motion artifact signal and filter it
-[rawSignal, sampleRate] = preProcessMotion.get_motion_artifact(example_dir, 'perch', 0);
-filteredSignal = preProcessMotion.filterSignal(rawSignal, sampleRate);
+[rawSignal, sampleRate] = Intan.preProcessMotion.get_motion_artifact(example_dir, 'perch', 0);
+filteredSignal = Intan.preProcessMotion.filterSignal(rawSignal, sampleRate);
 
 % load behavior and intan data that will be used to identify where 
 % to chop up and how to sort filtered signal
-b1 = preProcessMotion.processBeh(BcontDir,mouse_name, seshDate);
+b1 = Intan.preProcessMotion.processBeh(BcontDir,mouse_name, seshDate);
 
 cd('D:\NeuralData')
 load([mouse_name, '_', seshDate, '.mat'])
@@ -32,8 +32,8 @@ a.combineData(b1)
 
 %chop up and sort filtered signal
 xrange = [-1,1];
-parsedSignal = preProcessMotion.parseSignalTrials(a, filteredSignal, sampleRate, xrange);
-sortedTrials  = preProcessMotion.sortByTrialType(a);
+parsedSignal = Intan.preProcessMotion.parseSignalTrials(a, filteredSignal, sampleRate, xrange);
+sortedTrials  = Intan.preProcessMotion.sortByTrialType(a);
 
 sortedTrialNums = sortedTrials(:,2);
 signalTrialNums = cell2mat(parsedSignal(:,1));
@@ -42,7 +42,7 @@ sortedSignal_inds = cellfun(@(x) find(ismember(signalTrialNums, x)), sortedTrial
 sortedSignal = cellfun(@(x)  parsedSignal(x,:), sortedSignal_inds, 'uni', 0);
 
 %calculate rms of binned signal
-binnedRMS = preProcessMotion.motionRMS(sortedSignal, xrange, 0.025, sampleRate);
+binnedRMS = Intan.preProcessMotion.motionRMS(sortedSignal, xrange, 0.025, sampleRate);
 
 % range should be identical to range used in parsedSignalTrials
 % function
