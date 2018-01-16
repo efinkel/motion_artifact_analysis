@@ -1,3 +1,9 @@
+%%% Script that batch processes motion artifact collected from intan
+%%% recordings. Will output a list of trials that have high pre stimulus
+%%% motion artifact so that they can be excluded in later analyses. Also
+%%% plots figures that visualize the recorded motion artifact for every
+%%% trial in a session.
+
 clear
 directories = {'D:\EF0076', 'M:\EF0088', 'M:\EF0089', 'M:\EF0094', 'M:\EF0098', 'M:\EF0099',...
     'E:\EF0077-EF0090\EF0077','E:\EF0077-EF0090\EF0079','E:\EF0077-EF0090\EF0081','E:\EF0077-EF0090\EF0083',...
