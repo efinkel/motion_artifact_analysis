@@ -9,19 +9,19 @@ filtSignal(badIndexes) = NaN;
 t_hits = a.intanTrials_SsSb(cellfun(@(x) x.response == 1, a.BcontTrials_SsSb));
 t_CR = a.intanTrials_SsVb(cellfun(@(x) x.response == 0, a.BcontTrials_SsVb));
 t_misses = a.intanTrials_SsSb(cellfun(@(x) x.response == 0, a.BcontTrials_SsSb));
-
-ts_hits = a.intanTrials_SscSb(cellfun(@(x) x.response == 1, a.BcontTrials_SscSb));
-ts_CR = a.intanTrials_SscVb(cellfun(@(x) x.response == 0, a.BcontTrials_SscVb));
-ts_misses = a.intanTrials_SscSb(cellfun(@(x) x.response == 0, a.BcontTrials_SscSb));
+% 
+% ts_hits = a.intanTrials_SscSb(cellfun(@(x) x.response == 1, a.BcontTrials_SscSb));
+% ts_CR = a.intanTrials_SscVb(cellfun(@(x) x.response == 0, a.BcontTrials_SscVb));
+% ts_misses = a.intanTrials_SscSb(cellfun(@(x) x.response == 0, a.BcontTrials_SscSb));
 
 v_hits = a.intanTrials_VsVb(cellfun(@(x) x.response == 2, a.BcontTrials_VsVb));
 v_CR = a.intanTrials_VsSb(cellfun(@(x) x.response == 0, a.BcontTrials_VsSb));
 v_misses = a.intanTrials_VsVb(cellfun(@(x) x.response == 0, a.BcontTrials_VsVb));
-
-vs_hits = a.intanTrials_VscVb(cellfun(@(x) x.response == 2, a.BcontTrials_VscVb));
-vs_CR = a.intanTrials_VscSb(cellfun(@(x) x.response == 0, a.BcontTrials_VscSb));
-vs_misses = a.intanTrials_VscVb(cellfun(@(x) x.response == 0, a.BcontTrials_VscVb));
-
+% 
+% vs_hits = a.intanTrials_VscVb(cellfun(@(x) x.response == 2, a.BcontTrials_VscVb));
+% vs_CR = a.intanTrials_VscSb(cellfun(@(x) x.response == 0, a.BcontTrials_VscSb));
+% vs_misses = a.intanTrials_VscVb(cellfun(@(x) x.response == 0, a.BcontTrials_VscVb));
+% 
 
 
 fig = figure; hold on

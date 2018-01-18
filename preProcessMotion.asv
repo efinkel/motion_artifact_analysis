@@ -91,9 +91,9 @@ classdef preProcessMotion
         function rts = get_reactionTimes(sortedTrials)
             rts = [];
             for tt = 1:size(sortedTrials,1)
-                licks = cellfun(@(x) [x.lPreciseTrialLickTimes; x.rPreciseTrialLickTimes] - x.stimOnsetTime, sortedTrials{tt,3}, 'uni', 0);
+                licks = cellfun(@(x) [x.lpreciseTrialLickTimes, x.rpreciseTrialLickTimes] - x.stimOnsetTime, sortedTrials{tt,3}, 'uni', 0);
                 rts_tt = cell2mat(cellfun(@(x) min(x(x>=0.1 & x<=1.5)), licks, 'uni', 0));
-                rts = [rts; {rts_tt}];
+                rts = [rts; rts_tt];
             end
         end
             
