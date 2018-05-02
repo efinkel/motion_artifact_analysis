@@ -48,36 +48,48 @@ classdef preProcessMotion
             t_hits = {a.intanTrials_SsSb(cellfun(@(x) x.response ~= 0 & x.trialCorrect == 1, a.BcontTrials_SsSb))};
             t_CR = {a.intanTrials_SsVb(cellfun(@(x) x.response == 0, a.BcontTrials_SsVb))};
             t_misses = {a.intanTrials_SsSb(cellfun(@(x) x.response == 0, a.BcontTrials_SsSb))};
-            
+            t_FA = {horzcat(a.intanTrials_SsSb(cellfun(@(x) x.response ~= 0 & x.trialCorrect == 0, a.BcontTrials_SsSb)),...
+                a.intanTrials_SsVb(cellfun(@(x) x.response ~= 0 & x.trialCorrect == 0, a.BcontTrials_SsVb)))};
+
             v_hits = {a.intanTrials_VsVb(cellfun(@(x) x.response ~= 0 & x.trialCorrect == 1, a.BcontTrials_VsVb))};
             v_CR = {a.intanTrials_VsSb(cellfun(@(x) x.response == 0, a.BcontTrials_VsSb))};
             v_misses = {a.intanTrials_VsVb(cellfun(@(x) x.response == 0, a.BcontTrials_VsVb))};
+
+            v_FA = {horzcat(a.intanTrials_VsVb(cellfun(@(x) x.response ~= 0 & x.trialCorrect == 0, a.BcontTrials_VsVb)),...
+                a.intanTrials_VsSb(cellfun(@(x) x.response ~= 0 & x.trialCorrect == 0, a.BcontTrials_VsSb)))};
             
             % some mice didnt get the single cycle stimulus
             try
-                ts_hits = {a.intanTrials_SscSb(cellfun(@(x) x.response == 1, a.BcontTrials_SscSb))};
+                ts_hits = {a.intanTrials_SscSb(cellfun(@(x) x.response == 1 & x.trialCorrect == 1, a.BcontTrials_SscSb))};
                 ts_CR = {a.intanTrials_SscVb(cellfun(@(x) x.response == 0, a.BcontTrials_SscVb))};
                 ts_misses = {a.intanTrials_SscSb(cellfun(@(x) x.response == 0, a.BcontTrials_SscSb))};
+                ts_FA = {horzcat(a.intanTrials_SscSb(cellfun(@(x) x.response ~= 0 & x.trialCorrect == 0,  a.BcontTrials_SscSb)),...
+                    a.intanTrials_SscVb(cellfun(@(x) x.response ~= 0 & x.trialCorrect == 0, a.BcontTrials_SscVb)))};
 
-                vs_hits = {a.intanTrials_VscVb(cellfun(@(x) x.response == 2, a.BcontTrials_VscVb))};
-                vs_CR = {a.intanTrials_VscSb(cellfun(@(x) x.response == 0, a.BcontTrials_VscSb))};
-                vs_misses = {a.intanTrials_VscVb(cellfun(@(x) x.response == 0, a.BcontTrials_VscVb))};
-                
-                ttLabels = [{'t_hits'}; {'t_CR'}; {'t_misses'}; {'ts_hits'}; {'ts_CR'}; {'ts_misses'}; {'v_hits'};...
-                {'v_CR'}; {'v_misses'}; {'vs_hits'}; {'vs_CR'}; {'vs_misses'}];
+                vs_hits = {a.intanTrials_VscVb(cellfun(@(x) x.response == 2 & x.trialCorrect ==1, a.BcontTrials_VscVb))};
+                vs_CR = {a.intanTrials_VscSb(cellfun(@(x) x.response == 0 , a.BcontTrials_VscSb))};
+                vs_misses = {a.intanTrials_VscVb(cellfun(@(x) x.response ~= 0, a.BcontTrials_VscVb))};
+                vs_FA = {horzcat(a.intanTrials_VscVb(cellfun(@(x) x.response ~= 0 & x.trialCorrect ==0, a.BcontTrials_VscVb)),...
+                    a.intanTrials_VscSb(cellfun(@(x) x.response ~= 0 & x.trialCorrect ==0, a.BcontTrials_VscSb)))};
+
+                ttLabels = [{'t_hits'}; {'t_CR'}; {'t_misses'}; {'t_FA'}; {'ts_hits'}; {'ts_CR'}; {'ts_misses'}; {'ts_FA'}; {'v_hits'};...
+                {'v_CR'}; {'v_misses'};{'v_FA'}; {'vs_hits'}; {'vs_CR'}; {'vs_misses'}; {'vs_FA'}];
             catch
                 ts_hits = {};
                 ts_CR = {};
                 ts_misses = {};
+                ts_FA = {};
 
                 vs_hits = {};
                 vs_CR = {};
                 vs_misses = {};
-                ttLabels = [{'t_hits'}; {'t_CR'}; {'t_misses'};{'v_hits'};...
-                {'v_CR'}; {'v_misses'};];
+                vs_FA = {};
+                ttLabels = [{'t_hits'}; {'t_CR'};{'t_FA'}; {'t_misses'};{'v_hits'};...
+                {'v_CR'}; {'v_misses'}; {'v_FA'}];
             end
 
-            sortedtrialTypes = [t_hits, t_CR, t_misses, ts_hits, ts_CR, ts_misses, v_hits, v_CR, v_misses, vs_hits, vs_CR, vs_misses]';
+            sortedtrialTypes = [t_hits, t_CR, t_misses, t_FA, ts_hits, ts_CR, ts_misses, ts_FA, ...
+                v_hits, v_CR, v_misses, v_FA, vs_hits, vs_CR, vs_misses, vs_FA]';
             
             sortedTrialNums = [];
             for tt = 1:numel(sortedtrialTypes)
@@ -92,7 +104,7 @@ classdef preProcessMotion
             rts = [];
             for tt = 1:size(sortedTrials,1)
                 licks = cellfun(@(x) [x.lPreciseTrialLickTimes; x.rPreciseTrialLickTimes] - x.stimOnsetTime, sortedTrials{tt,3}, 'uni', 0);
-                rts_tt = cell2mat(cellfun(@(x) min(x(x>=0.1 & x<=1.5)), licks, 'uni', 0));
+                rts_tt = cell2mat(cellfun(@(x) min(x(x>=0.1 & x<=2)), licks, 'uni', 0));
                 rts = [rts; {rts_tt}];
             end
         end
@@ -104,7 +116,9 @@ classdef preProcessMotion
             %onset relative to the start of the session.
             trialNums = cellfun(@(x) x.trialNum(1), a.correctedIntanTrials);
             trial_starts = cellfun(@(x) x.rawTime(1), a.correctedIntanTrials);
-            stim_onsets = cellfun(@(x) x.stimOnsetTime, a.correctedIntanTrials);
+            stim_onsets = cellfun(@(x) x.stimOnsetTime, a.correctedIntanTrials,'uni', 0);
+            stim_onsets(cellfun(@(x) isempty(x), stim_onsets)) = {0};
+            stim_onsets = cell2mat(stim_onsets);
             aligned_so = stim_onsets+trial_starts;
             
             %mutliply the stim onset time by the sampling rate will give
@@ -114,8 +128,8 @@ classdef preProcessMotion
             
             %find the indeces of every timepoint around a fixed interval
             %around each stim.
-            window_starts = stim_onset_inds + range(1)*30000;
-            window_ends = stim_onset_inds + range(2)*30000;
+            window_starts = stim_onset_inds + range(1)*sampleRate;
+            window_ends = stim_onset_inds + range(2)*sampleRate;
             pSignal = arrayfun(@(x,y) filtSignal(x:y), window_starts, window_ends, 'uni', 0);
             pre_stim = arrayfun(@(x,y) filtSignal(x:y), window_starts, stim_onset_inds, 'uni', 0);
             
@@ -134,8 +148,8 @@ classdef preProcessMotion
             if strfind(bcont_type, 'switch')
                 b1 = Solo.EFcross3_switchArray([BcontDir, mouse_name, '\data_@EFcross3_switchobj_', mouse_name,'_', rawSeshDate, 'a'],...
                     [mouse_name, '_', rawSeshDate, 'a']);
-            elseif strfind(bcont_type, 'EFcross3rev')
-                b1 = Solo.EFcross3revArray([BcontDir, mouse_name, '\data_@EFcross3revobj_', mouse_name,'_', rawSeshDate, 'a'],...
+            elseif strfind(bcont_type, '3rev')
+                b1 = Solo.EFcross3revArray([BcontDir, mouse_name, '\data_@efcross3revobj_', mouse_name,'_', rawSeshDate, 'a'],...
                     [mouse_name, '_', rawSeshDate, 'a']);
             elseif strfind(bcont_type, 'EFcross3')
                 b1 = Solo.efcross3Array([BcontDir, mouse_name, '\data_@EFcross3obj_', mouse_name,'_', rawSeshDate, 'a'],...

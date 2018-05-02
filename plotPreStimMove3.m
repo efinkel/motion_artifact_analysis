@@ -10,7 +10,8 @@ tt = {touch_trials, visual_trials};
 hit_color = [76, 167, 51]/256;
 cr_color = [145, 104, 191]/256;
 miss_color = [129, 129, 129]/256;
-line_colors = {hit_color, cr_color, miss_color, hit_color, cr_color, miss_color};
+line_colors = {hit_color, cr_color, miss_color, hit_color, cr_color, miss_color,...
+    hit_color, cr_color, miss_color, hit_color, cr_color, miss_color};
 stim_colors = {[51, 119, 182]/256, [246, 130, 0]/256};
 subplots=[];
 line_heights = [];

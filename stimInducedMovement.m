@@ -7,7 +7,7 @@
 %%%     same specs as neural data
 %%% -see if CP activity precedes rms
 
-example_dir = 'C:\Users\PC\Documents\Current Data\YT015_FT\09-23-17_FT\';
+example_dir = 'C:\Users\PC\Documents\Current Data\YT015_FT\09-26-17_FT\';
 BcontDir = ['C:\Users\PC\Documents\Current Data\BCont_data', '\'];
 
 % identify session date, direction
