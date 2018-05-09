@@ -7,7 +7,7 @@
 %%%     same specs as neural data
 %%% -see if CP activity precedes rms
 clear
-example_dir = 'C:\Users\efink\Documents\DATA\NWB_hackathon_data\Data\EF0120\04-17-18b_FT\';
+example_dir = 'C:\Users\efink\Documents\DATA\NWB_hackathon_data\Data\EF0120\04-19-18_FT\';
 BcontDir = ['C:\Users\efink\Documents\DATA\NWB_hackathon_data\Data', '\'];
 
 % identify session date, direction
@@ -33,8 +33,8 @@ normedPerch2 = (firstDerivPerch2-min(firstDerivPerch2))/(max(firstDerivPerch2) -
 % load behavior and intan data that will be used to identify where 
 % to chop up and how to sort filtered signal
 rawSeshDate = seshDate([7,8,1,2,4,5]);
-b1 = Solo.EFcross3_switchArray([BcontDir,'\data_@efcross3_switchobj_', mouse_name,'_', rawSeshDate, 'b'],...
-                    [mouse_name, '_', rawSeshDate, 'b']);
+b1 = Solo.EFcross3_switchArray([BcontDir,'\data_@efcross3_switchobj_', mouse_name,'_', rawSeshDate, 'a'],...
+                    [mouse_name, '_', rawSeshDate, 'a']);
 
 load([mouse_name, '_', seshDate, '.mat'])
 a.combineData(b1)
